@@ -1,0 +1,15 @@
+# Anexo B — Registro de validação
+
+**Solução:** Sistema de Gestão de Horas Complementares
+
+| **Data e perfil** | **Hipótese** | **Evidência observada** | **Decisão** |
+| --- | --- | --- | --- |
+| De 26/09/2026 a 01/10/2026 — recebemos respostas de 13 estudantes da UCSal ao formulário, sem registrar sua identificação neste documento. | Acreditávamos que seria difícil manter as horas complementares organizadas e que os estudantes gostariam de acompanhar as atividades, os comprovantes e o que ainda falta cumprir em um só lugar. | Ao analisar as respostas, vimos que 8 dos 13 estudantes apontaram como maior dificuldade saber se uma atividade será aceita ou quantas horas ela vale. Outros 3 disseram não saber quantas horas faltam, e 2 destacaram a burocracia para enviar as atividades à coordenação. Sobre a ideia de centralizar comprovantes e calcular as horas restantes, 12 deram nota 5 e 1 deu nota 4, em uma escala de 1 a 5. Entre as funções desejadas, apareceram o gráfico de progresso (10 respostas), o armazenamento de comprovantes na nuvem (9), os alertas de pendências (8) e a exportação de relatório (7). | Decidimos começar pelo cadastro de atividades e comprovantes e por uma forma clara de acompanhar as horas registradas e restantes em cada categoria. Não vamos fazer o aplicativo dizer que uma atividade foi aprovada pela coordenação; primeiro, precisamos confirmar as regras em uma fonte oficial. Vamos deixar nuvem, alertas e exportação para depois, pois as respostas mostram interesse, mas ainda não testamos essas funções com usuários. |
+
+**Como fizemos e o que ainda não sabemos:** divulgamos o formulário em grupos de estudantes da UCSal. Como recebemos apenas 13 respostas, não podemos afirmar que elas representam todos os cursos ou estudantes. As respostas mostram a opinião de quem participou, mas ainda não provam que o software resolverá o problema.
+
+**O que aprendemos:** percebemos que a dúvida mais comum não é apenas onde guardar os comprovantes: muitos estudantes também não sabem se uma atividade será aceita ou quantas horas ela vale. As respostas indicam interesse em acompanhar o progresso, mas precisamos confirmar as regras acadêmicas e observar estudantes usando a solução antes de concluir que ela atende às necessidades.
+
+**O que mudou na nossa proposta:** decidimos priorizar o registro das atividades e comprovantes e a consulta das horas acumuladas e que ainda faltam por categoria. Também queremos testar a extração de sugestões de título, data e carga horária em PDFs pesquisáveis, sempre com revisão e confirmação do estudante. O formulário não perguntou sobre essa extração, então ela é uma hipótese da equipe que ainda precisa ser testada. A decisão sobre aceitar uma atividade continua sendo da coordenação. Antes de configurar categorias e limites, vamos confirmar quais regras se aplicam. Também deixaremos o armazenamento em nuvem, os alertas e a exportação para uma etapa futura.
+
+**De onde vieram os dados:** reunimos as respostas do formulário que aplicamos entre 26/09/2026 e 01/10/2026. Somamos os resultados para este registro e não incluímos no repositório o arquivo com as respostas individuais.
