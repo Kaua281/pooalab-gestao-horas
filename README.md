@@ -19,6 +19,12 @@ O fluxo proposto é configurar categorias e suas metas, registrar atividades, ex
 
 O problema e os dados iniciais de validação estão em [`docs/Anexo B — Registro de validação.md`](<docs/Anexo B — Registro de validação.md>). O escopo e os critérios do primeiro MVP estão em [`docs/Anexo C — Definição do MVP.md`](<docs/Anexo C — Definição do MVP.md>).
 
+## Arquitetura
+
+![Diagrama de classes da arquitetura](docs/ClassDiagram.svg)
+
+O código Mermaid, os padrões e a descrição das responsabilidades estão em [`docs/arquitetura.md`](docs/arquitetura.md).
+
 ## Requisitos para desenvolvimento
 
 - JDK 17 instalado, com `JAVA_HOME` apontando para a pasta do JDK
