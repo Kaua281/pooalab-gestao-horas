@@ -19,7 +19,14 @@ public final class SQLiteDatabase {
     }
 
     Connection openConnection() throws SQLException {
-        return DriverManager.getConnection(url);
+        Connection connection = DriverManager.getConnection(url);
+        try (Statement statement = connection.createStatement()) {
+            statement.execute("PRAGMA foreign_keys = ON");
+            return connection;
+        } catch (SQLException exception) {
+            connection.close();
+            throw exception;
+        }
     }
 
     private void initializeSchema() throws SQLException {
@@ -30,6 +37,16 @@ public final class SQLiteDatabase {
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         nome TEXT NOT NULL COLLATE NOCASE UNIQUE,
                         meta_horas TEXT NOT NULL
+                    )
+                    """);
+            statement.execute("""
+                    CREATE TABLE IF NOT EXISTS atividades (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        titulo TEXT NOT NULL,
+                        data TEXT NOT NULL,
+                        carga_horaria TEXT NOT NULL,
+                        categoria_id INTEGER NOT NULL,
+                        FOREIGN KEY (categoria_id) REFERENCES categorias (id)
                     )
                     """);
         }

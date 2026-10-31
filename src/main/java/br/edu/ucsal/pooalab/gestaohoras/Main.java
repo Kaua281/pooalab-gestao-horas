@@ -1,7 +1,9 @@
 package br.edu.ucsal.pooalab.gestaohoras;
 
+import br.edu.ucsal.pooalab.gestaohoras.aplicacao.AtividadeService;
 import br.edu.ucsal.pooalab.gestaohoras.aplicacao.CategoriaService;
 import br.edu.ucsal.pooalab.gestaohoras.apresentacao.AplicacaoTerminal;
+import br.edu.ucsal.pooalab.gestaohoras.persistencia.SQLiteAtividadeRepository;
 import br.edu.ucsal.pooalab.gestaohoras.persistencia.SQLiteCategoriaRepository;
 import br.edu.ucsal.pooalab.gestaohoras.persistencia.SQLiteDatabase;
 
@@ -20,8 +22,11 @@ public final class Main {
         try {
             SQLiteDatabase database = new SQLiteDatabase(dataDirectory.resolve("gestao-horas.db"));
             SQLiteCategoriaRepository categorias = new SQLiteCategoriaRepository(database);
+            SQLiteAtividadeRepository atividades = new SQLiteAtividadeRepository(database);
             AplicacaoTerminal aplicacao = new AplicacaoTerminal(
-                    new CategoriaService(categorias), new Scanner(System.in));
+                    new CategoriaService(categorias),
+                    new AtividadeService(atividades, categorias),
+                    new Scanner(System.in));
             aplicacao.executar();
         } catch (IOException exception) {
             System.err.println("Não foi possível criar a pasta de dados: " + exception.getMessage());
