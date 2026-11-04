@@ -1,23 +1,23 @@
 package br.edu.ucsal.pooalab.gestaohoras.apresentacao;
 
-import br.edu.ucsal.pooalab.gestaohoras.aplicacao.CategoriaService;
-import br.edu.ucsal.pooalab.gestaohoras.aplicacao.AtividadeService;
-import br.edu.ucsal.pooalab.gestaohoras.persistencia.SQLiteAtividadeRepository;
-import br.edu.ucsal.pooalab.gestaohoras.persistencia.SQLiteCategoriaRepository;
-import br.edu.ucsal.pooalab.gestaohoras.persistencia.SQLiteDatabase;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-
-import java.io.StringReader;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.io.StringReader;
 import java.math.BigDecimal;
-import java.nio.file.Path;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
+import br.edu.ucsal.pooalab.gestaohoras.aplicacao.AtividadeService;
+import br.edu.ucsal.pooalab.gestaohoras.aplicacao.CategoriaService;
+import br.edu.ucsal.pooalab.gestaohoras.persistencia.SQLiteAtividadeRepository;
+import br.edu.ucsal.pooalab.gestaohoras.persistencia.SQLiteCategoriaRepository;
+import br.edu.ucsal.pooalab.gestaohoras.persistencia.SQLiteDatabase;
 
 class AplicacaoTerminalTest {
     @TempDir
