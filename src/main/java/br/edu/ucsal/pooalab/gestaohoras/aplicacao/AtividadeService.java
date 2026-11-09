@@ -31,7 +31,7 @@ public final class AtividadeService {
         if (id == null) {
             throw new IllegalArgumentException("O identificador da atividade é obrigatório.");
         }
-        Categoria categoria = buscarCategoria(categoriaId);
+        Categoria categoria = categoriaId == null ? null : buscarCategoria(categoriaId);
         return atividadeRepository.salvar(
                 new AtividadeComplementar(id, titulo, data, cargaHoraria, categoria));
     }

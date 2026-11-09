@@ -21,10 +21,6 @@ public final class AtividadeComplementar {
         if (cargaHoraria == null || cargaHoraria.signum() <= 0) {
             throw new IllegalArgumentException("A carga horária deve ser maior que zero.");
         }
-        if (categoria == null) {
-            throw new IllegalArgumentException("A categoria da atividade é obrigatória.");
-        }
-
         this.id = id;
         this.titulo = titulo.trim();
         this.data = data;

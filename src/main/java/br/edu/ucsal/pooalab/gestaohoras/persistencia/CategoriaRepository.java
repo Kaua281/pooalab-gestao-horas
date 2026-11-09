@@ -7,5 +7,9 @@ import java.util.List;
 public interface CategoriaRepository {
     Categoria salvar(Categoria categoria);
 
+    Categoria atualizar(Categoria categoria);
+
     List<Categoria> listarTodas();
+
+    void remover(Long id);
 }

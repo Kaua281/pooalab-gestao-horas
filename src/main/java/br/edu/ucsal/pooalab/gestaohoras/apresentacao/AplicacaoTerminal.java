@@ -40,6 +40,8 @@ public final class AplicacaoTerminal {
                     case "4" -> listarAtividades();
                     case "5" -> editarAtividade();
                     case "6" -> removerAtividade();
+                    case "7" -> editarCategoria();
+                    case "8" -> removerCategoria();
                     case "0" -> executando = false;
                     default -> System.out.println("Opção inválida.");
                 }
@@ -61,6 +63,8 @@ public final class AplicacaoTerminal {
                 4. Listar atividades
                 5. Editar atividade
                 6. Remover atividade
+                7. Editar categoria
+                8. Remover categoria
                 0. Sair""");
         System.out.print("Escolha uma opção: ");
     }
@@ -86,6 +90,37 @@ public final class AplicacaoTerminal {
         }
     }
 
+    private void editarCategoria() {
+        long id = lerId("ID da categoria que deseja editar: ");
+        Categoria existente = buscarCategoria(id);
+        Categoria atualizada = categorias.atualizar(
+                id,
+                lerObrigatorio("Nome da categoria: "),
+                lerMetaHoras());
+        System.out.println("Categoria " + existente.getId() + " atualizada para "
+                + atualizada.getNome() + ".");
+    }
+
+    private void removerCategoria() {
+        long id = lerId("ID da categoria que deseja remover: ");
+        Categoria categoria = buscarCategoria(id);
+        System.out.println("As atividades serão mantidas sem categoria e poderão ser reclassificadas.");
+        String confirmacao = lerObrigatorio("Remover a categoria " + categoria.getNome() + "? (s/n): ");
+        if (!confirmacao.equalsIgnoreCase("s") && !confirmacao.equalsIgnoreCase("sim")) {
+            System.out.println("Remoção cancelada.");
+            return;
+        }
+        categorias.remover(id);
+        System.out.println("Categoria removida. As atividades foram mantidas sem categoria.");
+    }
+
+    private Categoria buscarCategoria(long id) {
+        return categorias.listar().stream()
+                .filter(categoria -> categoria.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Categoria não encontrada."));
+    }
+
     private void cadastrarAtividade() {
         if (categorias.listar().isEmpty()) {
             System.out.println("Cadastre uma categoria antes de registrar atividades.");
@@ -96,7 +131,7 @@ public final class AplicacaoTerminal {
                 lerObrigatorio("Título: "),
                 lerData(),
                 lerCargaHoraria(),
-                lerId("ID da categoria: "));
+                lerIdOpcional("ID da categoria (Enter para deixar sem categoria): "));
         System.out.println("Atividade cadastrada com ID " + atividade.getId() + ".");
     }
 
@@ -123,7 +158,7 @@ public final class AplicacaoTerminal {
                 lerObrigatorio("Título: "),
                 lerData(),
                 lerCargaHoraria(),
-                lerId("ID da categoria: "));
+                lerIdOpcional("ID da categoria (Enter para deixar sem categoria): "));
         System.out.println("Atividade " + existente.getId() + " atualizada.");
     }
 
@@ -147,7 +182,7 @@ public final class AplicacaoTerminal {
                 atividade.getTitulo(),
                 atividade.getData(),
                 formatar(atividade.getCargaHoraria()),
-                atividade.getCategoria().getNome()
+                atividade.getCategoria() == null ? "Sem categoria" : atividade.getCategoria().getNome()
         );
     }
 
@@ -192,6 +227,25 @@ public final class AplicacaoTerminal {
                 return id;
             }
             System.out.println("O ID deve ser maior que zero.");
+        }
+    }
+
+    private Long lerIdOpcional(String pergunta) {
+        while (true) {
+            System.out.print(pergunta);
+            String valor = entrada.nextLine().trim();
+            if (valor.isEmpty()) {
+                return null;
+            }
+            try {
+                long id = Long.parseLong(valor);
+                if (id > 0) {
+                    return id;
+                }
+            } catch (NumberFormatException ignored) {
+                // Continue prompting for a valid category ID.
+            }
+            System.out.println("Informe um ID numérico válido maior que zero ou deixe em branco.");
         }
     }
 
