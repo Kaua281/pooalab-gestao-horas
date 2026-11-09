@@ -25,6 +25,7 @@ Reunir em um só lugar o registro das atividades complementares e seus comprovan
 
 - Aplicação desktop em Java, executada localmente.
 - Cadastro e edição de categorias e suas metas de horas.
+- Remoção de categorias sem apagar as atividades associadas; elas ficam sem categoria e podem ser reclassificadas ao editar o registro.
 - Cadastro, consulta, edição e remoção de atividades.
 - Associação opcional de comprovante PDF ou imagem a uma atividade.
 - Extração de texto de PDFs pesquisáveis (com texto selecionável) para sugerir título, data e carga horária da atividade, quando essas informações forem encontradas.
@@ -40,7 +41,7 @@ As categorias e metas serão informadas pelo estudante. Não vamos presumir que 
 - Conseguimos criar e alterar uma categoria e sua meta.
 - O sistema não aceita categoria sem nome ou com meta menor ou igual a zero.
 - Conseguimos registrar uma atividade válida e associá-la a uma categoria existente.
-- O sistema não aceita atividade sem título, data, categoria ou carga horária positiva.
+- O sistema não aceita atividade sem título, data ou carga horária positiva; atividades podem ficar sem categoria após a remoção de uma categoria.
 - Conseguimos editar e remover uma atividade, e os totais são recalculados corretamente após cada operação.
 - As horas registradas por categoria correspondem à soma das atividades registradas naquela categoria.
 - As horas restantes correspondem a `máximo entre zero e (meta da categoria - horas registradas)`.

@@ -7,10 +7,14 @@ import org.junit.jupiter.api.io.TempDir;
 
 import java.math.BigDecimal;
 import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class SQLiteAtividadeRepositoryTest {
     @TempDir
@@ -42,5 +46,42 @@ class SQLiteAtividadeRepositoryTest {
         repositorioReaberto.remover(salva.getId());
 
         assertFalse(repositorioReaberto.buscarPorId(salva.getId()).isPresent());
+    }
+
+    @Test
+    void migraBancoAntigoPreservandoAtividades() throws Exception {
+        Path arquivoBanco = pastaTemporaria.resolve("legado.db");
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + arquivoBanco);
+             Statement statement = connection.createStatement()) {
+            statement.execute("""
+                    CREATE TABLE categorias (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        nome TEXT NOT NULL COLLATE NOCASE UNIQUE,
+                        meta_horas TEXT NOT NULL
+                    )
+                    """);
+            statement.execute("""
+                    CREATE TABLE atividades (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        titulo TEXT NOT NULL,
+                        data TEXT NOT NULL,
+                        carga_horaria TEXT NOT NULL,
+                        categoria_id INTEGER NOT NULL,
+                        FOREIGN KEY (categoria_id) REFERENCES categorias (id)
+                    )
+                    """);
+            statement.execute("INSERT INTO categorias (id, nome, meta_horas) VALUES (1, 'Pesquisa', '10')");
+            statement.execute("""
+                    INSERT INTO atividades (id, titulo, data, carga_horaria, categoria_id)
+                    VALUES (1, 'Artigo', '2026-10-30', '4', 1)
+                    """);
+        }
+
+        SQLiteDatabase banco = new SQLiteDatabase(arquivoBanco);
+        SQLiteCategoriaRepository categorias = new SQLiteCategoriaRepository(banco);
+        SQLiteAtividadeRepository atividades = new SQLiteAtividadeRepository(banco);
+        categorias.remover(1L);
+
+        assertNull(atividades.buscarPorId(1L).orElseThrow().getCategoria());
     }
 }

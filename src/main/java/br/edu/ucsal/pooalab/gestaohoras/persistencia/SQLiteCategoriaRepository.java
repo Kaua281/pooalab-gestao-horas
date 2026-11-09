@@ -39,6 +39,23 @@ public final class SQLiteCategoriaRepository implements CategoriaRepository {
     }
 
     @Override
+    public Categoria atualizar(Categoria categoria) {
+        String sql = "UPDATE categorias SET nome = ?, meta_horas = ? WHERE id = ?";
+        try (Connection connection = database.openConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, categoria.getNome());
+            statement.setString(2, categoria.getMetaHoras().toPlainString());
+            statement.setLong(3, categoria.getId());
+            if (statement.executeUpdate() == 0) {
+                throw new IllegalArgumentException("Categoria não encontrada.");
+            }
+            return categoria;
+        } catch (SQLException exception) {
+            throw new IllegalStateException("Não foi possível atualizar a categoria.", exception);
+        }
+    }
+
+    @Override
     public List<Categoria> listarTodas() {
         String sql = "SELECT id, nome, meta_horas FROM categorias ORDER BY nome";
         try (Connection connection = database.openConnection();
@@ -51,6 +68,35 @@ public final class SQLiteCategoriaRepository implements CategoriaRepository {
             return categorias;
         } catch (SQLException exception) {
             throw new IllegalStateException("Não foi possível listar as categorias.", exception);
+        }
+    }
+
+    @Override
+    public void remover(Long id) {
+        try (Connection connection = database.openConnection()) {
+            connection.setAutoCommit(false);
+            try (PreparedStatement desvincular = connection.prepareStatement(
+                    "UPDATE atividades SET categoria_id = NULL WHERE categoria_id = ?");
+                 PreparedStatement remover = connection.prepareStatement(
+                         "DELETE FROM categorias WHERE id = ?")) {
+                desvincular.setLong(1, id);
+                desvincular.executeUpdate();
+
+                remover.setLong(1, id);
+                if (remover.executeUpdate() == 0) {
+                    throw new IllegalArgumentException("Categoria não encontrada.");
+                }
+                connection.commit();
+            } catch (SQLException | RuntimeException exception) {
+                try {
+                    connection.rollback();
+                } catch (SQLException rollbackException) {
+                    exception.addSuppressed(rollbackException);
+                }
+                throw exception;
+            }
+        } catch (SQLException exception) {
+            throw new IllegalStateException("Não foi possível remover a categoria.", exception);
         }
     }
 

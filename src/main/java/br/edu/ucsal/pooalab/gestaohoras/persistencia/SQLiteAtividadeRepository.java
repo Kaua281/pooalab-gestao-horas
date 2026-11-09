@@ -19,7 +19,7 @@ public final class SQLiteAtividadeRepository implements AtividadeRepository {
             SELECT a.id, a.titulo, a.data, a.carga_horaria,
                    c.id AS categoria_id, c.nome AS categoria_nome, c.meta_horas
             FROM atividades a
-            JOIN categorias c ON c.id = a.categoria_id
+            LEFT JOIN categorias c ON c.id = a.categoria_id
             """;
 
     private final SQLiteDatabase database;
@@ -125,12 +125,17 @@ public final class SQLiteAtividadeRepository implements AtividadeRepository {
         statement.setString(1, atividade.getTitulo());
         statement.setString(2, atividade.getData().toString());
         statement.setString(3, atividade.getCargaHoraria().toPlainString());
-        statement.setLong(4, atividade.getCategoria().getId());
+        if (atividade.getCategoria() == null) {
+            statement.setNull(4, java.sql.Types.INTEGER);
+        } else {
+            statement.setLong(4, atividade.getCategoria().getId());
+        }
     }
 
     private AtividadeComplementar mapear(ResultSet result) throws SQLException {
-        Categoria categoria = new Categoria(
-                result.getLong("categoria_id"),
+        long categoriaId = result.getLong("categoria_id");
+        Categoria categoria = result.wasNull() ? null : new Categoria(
+                categoriaId,
                 result.getString("categoria_nome"),
                 new BigDecimal(result.getString("meta_horas"))
         );
