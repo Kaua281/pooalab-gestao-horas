@@ -21,7 +21,7 @@ public final class AtividadeService {
 
     public AtividadeComplementar cadastrar(
             String titulo, LocalDate data, BigDecimal cargaHoraria, Long categoriaId) {
-        Categoria categoria = buscarCategoria(categoriaId);
+        Categoria categoria = categoriaId == null ? null : buscarCategoria(categoriaId);
         return atividadeRepository.salvar(
                 new AtividadeComplementar(null, titulo, data, cargaHoraria, categoria));
     }

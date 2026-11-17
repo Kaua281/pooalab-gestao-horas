@@ -122,10 +122,6 @@ public final class AplicacaoTerminal {
     }
 
     private void cadastrarAtividade() {
-        if (categorias.listar().isEmpty()) {
-            System.out.println("Cadastre uma categoria antes de registrar atividades.");
-            return;
-        }
         mostrarCategorias();
         AtividadeComplementar atividade = atividades.cadastrar(
                 lerObrigatorio("Título: "),
@@ -169,8 +165,13 @@ public final class AplicacaoTerminal {
     }
 
     private void mostrarCategorias() {
+        List<Categoria> lista = categorias.listar();
+        if (lista.isEmpty()) {
+            System.out.println("Nenhuma categoria cadastrada. A atividade ficará sem categoria.");
+            return;
+        }
         System.out.println("Categorias disponíveis:");
-        for (Categoria categoria : categorias.listar()) {
+        for (Categoria categoria : lista) {
             System.out.printf("%d - %s%n", categoria.getId(), categoria.getNome());
         }
     }

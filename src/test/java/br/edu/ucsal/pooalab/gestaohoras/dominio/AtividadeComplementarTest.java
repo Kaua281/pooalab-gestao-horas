@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AtividadeComplementarTest {
@@ -19,8 +20,14 @@ class AtividadeComplementarTest {
                 () -> new AtividadeComplementar(null, "Artigo", null, BigDecimal.ONE, categoria));
         assertThrows(IllegalArgumentException.class,
                 () -> new AtividadeComplementar(null, "Artigo", LocalDate.now(), BigDecimal.ZERO, categoria));
-        assertThrows(IllegalArgumentException.class,
-                () -> new AtividadeComplementar(null, "Artigo", LocalDate.now(), BigDecimal.ONE, null));
+    }
+
+    @Test
+    void permiteAtividadeSemCategoria() {
+        AtividadeComplementar atividade = new AtividadeComplementar(
+                null, "Artigo", LocalDate.of(2026, 10, 30), BigDecimal.ONE, null);
+
+        assertNull(atividade.getCategoria());
     }
 
     @Test

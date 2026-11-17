@@ -1,6 +1,6 @@
 # Gestão de Horas Complementares
 
-Aplicação desktop em Java para ajudar estudantes a registrar atividades complementares, associar comprovantes e acompanhar horas cumpridas e pendentes por categoria.
+Aplicação local em Java para registrar atividades complementares e configurar categorias e metas. A versão atual oferece uma interface de terminal; a interface desktop Swing prevista no MVP ainda não foi implementada.
 
 ## Equipe
 
@@ -15,7 +15,7 @@ Aplicação desktop em Java para ajudar estudantes a registrar atividades comple
 
 ## Escopo inicial
 
-O fluxo proposto é configurar categorias e suas metas, registrar atividades, extrair sugestões de título, data e carga horária de PDFs pesquisáveis e acompanhar o progresso por categoria. As sugestões precisam ser conferidas pelo estudante; o sistema não substitui a avaliação oficial da coordenação. Imagens e PDFs digitalizados poderão ser anexados, mas não terão OCR nesta versão.
+O MVP prevê configurar categorias e suas metas, registrar atividades, associar comprovantes e acompanhar o progresso por categoria. Na versão atual, cadastro, edição e remoção de categorias e atividades e persistência local em SQLite estão disponíveis. A interface de progresso, o gerenciamento de comprovantes e a extração de dados de PDFs ainda não foram implementados. O sistema não substitui a avaliação oficial da coordenação.
 
 O problema e os dados iniciais de validação estão em [`docs/Anexo B — Registro de validação.md`](<docs/Anexo B — Registro de validação.md>). O escopo e os critérios do primeiro MVP estão em [`docs/Anexo C — Definição do MVP.md`](<docs/Anexo C — Definição do MVP.md>).
 
@@ -72,13 +72,27 @@ O primeiro uso baixa o Maven 3.9.9 e as bibliotecas do projeto; por isso, precis
 
 ## Executar e demonstrar
 
-A aplicação ainda está em preparação e não possui ponto de entrada executável. O comando para iniciá-la e o roteiro de demonstração serão documentados quando o fluxo principal estiver implementado.
+Com o JDK 17 configurado, inicie a interface de terminal:
+
+No Windows:
+
+```bash
+.\mvnw.cmd exec:java
+```
+
+No macOS/Linux:
+
+```bash
+sh ./mvnw exec:java
+```
+
+Os dados ficam em `~/.gestao-horas/gestao-horas.db` (no Windows, dentro da pasta do usuário). Para uma demonstração, use dados fictícios: cadastre uma categoria, registre atividades com datas e cargas horárias de exemplo, liste-as e teste a edição e a remoção. Atividades podem ser registradas sem categoria e reclassificadas depois.
 
 ## Tecnologias
 
-- Java Swing para a interface desktop
+- Java 17; a versão atual usa interface de terminal, com Java Swing previsto para a interface desktop
 - SQLite JDBC para persistência local
-- Apache PDFBox para leitura de PDFs pesquisáveis
+- Apache PDFBox está declarado como dependência para uma etapa futura; leitura e extração de PDFs ainda não estão implementadas
 - JUnit 5 para testes automatizados
 
 ## Estrutura
@@ -87,7 +101,6 @@ A aplicação ainda está em preparação e não possui ponto de entrada execut�
 src/main/java/     código da aplicação
 src/test/java/     testes automatizados
 docs/              problema, validação e definição do MVP
-demo/              dados e instruções de demonstração
 ```
 
 ## Transparência

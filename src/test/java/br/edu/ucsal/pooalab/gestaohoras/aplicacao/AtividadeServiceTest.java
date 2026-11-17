@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AtividadeServiceTest {
@@ -18,12 +19,14 @@ class AtividadeServiceTest {
     Path pastaTemporaria;
 
     @Test
-    void exigeCategoriaExistenteParaCadastrarAtividade() throws Exception {
+    void permiteCadastrarSemCategoriaMasValidaCategoriaInformada() throws Exception {
         SQLiteDatabase banco = new SQLiteDatabase(pastaTemporaria.resolve("teste.db"));
         SQLiteCategoriaRepository categorias = new SQLiteCategoriaRepository(banco);
         AtividadeService servico = new AtividadeService(
                 new SQLiteAtividadeRepository(banco), categorias);
 
+        assertNull(servico.cadastrar(
+                "Artigo", LocalDate.of(2026, 10, 30), BigDecimal.ONE, null).getCategoria());
         assertThrows(IllegalArgumentException.class, () -> servico.cadastrar(
                 "Artigo", LocalDate.of(2026, 10, 30), BigDecimal.ONE, 99L));
 

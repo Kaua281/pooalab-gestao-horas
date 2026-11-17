@@ -17,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AplicacaoTerminalTest {
@@ -116,5 +117,30 @@ class AplicacaoTerminalTest {
 
         SQLiteAtividadeRepository atividades = new SQLiteAtividadeRepository(database);
         assertTrue(atividades.listarTodas().isEmpty());
+    }
+
+    @Test
+    void cadastraAtividadeSemCategoria() throws Exception {
+        SQLiteDatabase database = new SQLiteDatabase(pastaTemporaria.resolve("sem-categoria.db"));
+        SQLiteCategoriaRepository categorias = new SQLiteCategoriaRepository(database);
+        AplicacaoTerminal aplicacao = new AplicacaoTerminal(
+                new CategoriaService(categorias),
+                new AtividadeService(new SQLiteAtividadeRepository(database), categorias),
+                new Scanner(new StringReader("""
+                        3
+                        Artigo
+                        2026-10-30
+                        4
+
+                        0
+                        """))
+        );
+
+        aplicacao.executar();
+
+        SQLiteAtividadeRepository atividades = new SQLiteAtividadeRepository(database);
+        assertEquals(1, atividades.listarTodas().size());
+        assertEquals("Artigo", atividades.listarTodas().get(0).getTitulo());
+        assertNull(atividades.listarTodas().get(0).getCategoria());
     }
 }
