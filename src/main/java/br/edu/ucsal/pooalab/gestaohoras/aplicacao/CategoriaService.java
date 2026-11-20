@@ -45,6 +45,10 @@ public final class CategoriaService {
         return repository.listarTodas();
     }
 
+    public void atualizarOrdem(List<Long> ids) {
+        repository.atualizarOrdem(ids);
+    }
+
     private void validarNomeUnico(Categoria categoria) {
         for (Categoria cadastrada : repository.listarTodas()) {
             if (!cadastrada.getId().equals(categoria.getId())

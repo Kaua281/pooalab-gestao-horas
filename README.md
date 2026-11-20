@@ -1,6 +1,6 @@
 # Gestão de Horas Complementares
 
-Aplicação local em Java para registrar atividades complementares e configurar categorias e metas. A versão atual oferece uma interface de terminal; a interface desktop Swing prevista no MVP ainda não foi implementada.
+Aplicação local em Java para registrar atividades complementares e configurar categorias e metas. A interface desktop Swing apresenta um painel inicial com o resumo dos dados salvos; as telas de cadastro e gerenciamento ainda estão em desenvolvimento.
 
 ## Equipe
 
@@ -72,7 +72,7 @@ O primeiro uso baixa o Maven 3.9.9 e as bibliotecas do projeto; por isso, precis
 
 ## Executar e demonstrar
 
-Com o JDK 17 configurado, inicie a interface de terminal:
+Com o JDK 17 configurado, inicie o painel desktop:
 
 No Windows:
 
@@ -86,11 +86,25 @@ No macOS/Linux:
 sh ./mvnw exec:java
 ```
 
-Os dados ficam em `~/.gestao-horas/gestao-horas.db` (no Windows, dentro da pasta do usuário). Para uma demonstração, use dados fictícios: cadastre uma categoria, registre atividades com datas e cargas horárias de exemplo, liste-as e teste a edição e a remoção. Atividades podem ser registradas sem categoria e reclassificadas depois.
+Para iniciar a interface de terminal disponível enquanto as demais telas são desenvolvidas, passe `--terminal`:
+
+No Windows:
+
+```bash
+.\mvnw.cmd exec:java -Dexec.args="--terminal"
+```
+
+No macOS/Linux:
+
+```bash
+sh ./mvnw exec:java -Dexec.args="--terminal"
+```
+
+Os dados ficam em `~/.gestao-horas/gestao-horas.db` (no Windows, dentro da pasta do usuário). Na visão geral, arraste as categorias para mudar a ordem; a escolha fica salva localmente. Como as telas de cadastro ainda estão em desenvolvimento, use `--terminal` e dados fictícios para cadastrar uma categoria, registrar atividades, listar, editar e remover registros. Atividades podem ser registradas sem categoria e reclassificadas depois.
 
 ## Tecnologias
 
-- Java 17; a versão atual usa interface de terminal, com Java Swing previsto para a interface desktop
+- Java 17 e Java Swing para a interface desktop; a interface de terminal também pode ser iniciada com `--terminal`
 - SQLite JDBC para persistência local
 - Apache PDFBox está declarado como dependência para uma etapa futura; leitura e extração de PDFs ainda não estão implementadas
 - JUnit 5 para testes automatizados
@@ -105,4 +119,4 @@ docs/              problema, validação e definição do MVP
 
 ## Transparência
 
-A declaração obrigatória de uso de IA e de componentes de terceiros deverá ser preparada e incluída na entrega final, conforme o Anexo E do manual. A equipe deve registrar as ferramentas e os materiais utilizados durante o desenvolvimento.
+A declaração obrigatória de componentes de terceiros deverá ser preparada e incluída na entrega final, conforme o Anexo E do manual. A equipe deve registrar as ferramentas e os materiais utilizados durante o desenvolvimento.

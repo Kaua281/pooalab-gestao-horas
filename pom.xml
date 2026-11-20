@@ -8,7 +8,7 @@
     <artifactId>gestao-horas</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>Gestao de Horas Complementares</name>
-    <description>Aplicacao de terminal para controle de horas complementares.</description>
+    <description>Aplicacao desktop local para controle de horas complementares.</description>
 
     <properties>
         <maven.compiler.release>17</maven.compiler.release>

@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class SQLiteDatabase {
     private final String url;
@@ -36,7 +38,8 @@ public final class SQLiteDatabase {
                     CREATE TABLE IF NOT EXISTS categorias (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         nome TEXT NOT NULL COLLATE NOCASE UNIQUE,
-                        meta_horas TEXT NOT NULL
+                        meta_horas TEXT NOT NULL,
+                        ordem_visualizacao INTEGER NOT NULL DEFAULT 0
                     )
                     """);
             statement.execute("""
@@ -50,7 +53,55 @@ public final class SQLiteDatabase {
                     )
                     """);
         }
+        migrarOrdemCategorias();
         migrarCategoriaOpcional();
+    }
+
+    private void migrarOrdemCategorias() throws SQLException {
+        boolean colunaExiste = false;
+        try (Connection connection = openConnection();
+             Statement statement = connection.createStatement();
+             var columns = statement.executeQuery("PRAGMA table_info(categorias)")) {
+            while (columns.next()) {
+                if ("ordem_visualizacao".equals(columns.getString("name"))) {
+                    colunaExiste = true;
+                    break;
+                }
+            }
+        }
+        if (colunaExiste) {
+            return;
+        }
+
+        try (Connection connection = openConnection();
+             Statement statement = connection.createStatement()) {
+            connection.setAutoCommit(false);
+            try {
+                statement.execute("""
+                        ALTER TABLE categorias
+                        ADD COLUMN ordem_visualizacao INTEGER NOT NULL DEFAULT 0
+                        """);
+                List<Long> ids = new ArrayList<>();
+                try (var categorias = statement.executeQuery(
+                        "SELECT id FROM categorias ORDER BY nome, id")) {
+                    while (categorias.next()) {
+                        ids.add(categorias.getLong("id"));
+                    }
+                }
+                try (var atualizar = connection.prepareStatement(
+                        "UPDATE categorias SET ordem_visualizacao = ? WHERE id = ?")) {
+                    for (int ordem = 0; ordem < ids.size(); ordem++) {
+                        atualizar.setInt(1, ordem);
+                        atualizar.setLong(2, ids.get(ordem));
+                        atualizar.executeUpdate();
+                    }
+                }
+                connection.commit();
+            } catch (SQLException exception) {
+                connection.rollback();
+                throw exception;
+            }
+        }
     }
 
     private void migrarCategoriaOpcional() throws SQLException {

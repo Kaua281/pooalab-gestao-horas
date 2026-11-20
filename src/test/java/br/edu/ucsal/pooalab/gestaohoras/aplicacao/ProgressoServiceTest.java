@@ -52,7 +52,7 @@ class ProgressoServiceTest {
     void somaAsHorasDeCadaCategoriaSeparadamente() {
         long palestras = categorias.cadastrar("Palestras", new BigDecimal("50")).getId();
         long cursos = categorias.cadastrar("Cursos", new BigDecimal("60")).getId();
-        atividades.cadastrar("IA", DATA, new BigDecimal("4"), palestras);
+        atividades.cadastrar("Workshop", DATA, new BigDecimal("4"), palestras);
         atividades.cadastrar("Dados", DATA, new BigDecimal("6.5"), palestras);
         atividades.cadastrar("Java", DATA, new BigDecimal("12"), cursos);
 
@@ -81,7 +81,7 @@ class ProgressoServiceTest {
     void totalGeralSomaTodasAsCategorias() {
         long palestras = categorias.cadastrar("Palestras", new BigDecimal("50")).getId();
         long cursos = categorias.cadastrar("Cursos", new BigDecimal("60")).getId();
-        atividades.cadastrar("IA", DATA, new BigDecimal("4"), palestras);
+        atividades.cadastrar("Workshop", DATA, new BigDecimal("4"), palestras);
         atividades.cadastrar("Java", DATA, new BigDecimal("18.5"), cursos);
 
         assertHoras("22.5", progresso.totalHorasRegistradas());
@@ -99,13 +99,13 @@ class ProgressoServiceTest {
     void totaisSaoRecalculadosAposEditarEMoverERemover() {
         long palestras = categorias.cadastrar("Palestras", new BigDecimal("50")).getId();
         long cursos = categorias.cadastrar("Cursos", new BigDecimal("60")).getId();
-        long id = atividades.cadastrar("IA", DATA, new BigDecimal("10"), palestras).getId();
+        long id = atividades.cadastrar("Workshop", DATA, new BigDecimal("10"), palestras).getId();
         assertHoras("10", resumoDe("Palestras").horasRegistradas());
 
-        atividades.atualizar(id, "IA", DATA, new BigDecimal("4"), palestras); // edita a carga
+        atividades.atualizar(id, "Workshop", DATA, new BigDecimal("4"), palestras); // edita a carga
         assertHoras("4", resumoDe("Palestras").horasRegistradas());
 
-        atividades.atualizar(id, "IA", DATA, new BigDecimal("4"), cursos);    // muda de categoria
+        atividades.atualizar(id, "Workshop", DATA, new BigDecimal("4"), cursos); // muda de categoria
         assertHoras("0", resumoDe("Palestras").horasRegistradas());
         assertHoras("4", resumoDe("Cursos").horasRegistradas());
 
@@ -130,7 +130,7 @@ class ProgressoServiceTest {
     void atividadeSemCategoriaEntraNoTotalMasNaoEmNenhumaCategoria() {
         long palestras = categorias.cadastrar("Palestras", new BigDecimal("50")).getId();
         long cursos = categorias.cadastrar("Cursos", new BigDecimal("60")).getId();
-        atividades.cadastrar("IA", DATA, new BigDecimal("4"), palestras);
+        atividades.cadastrar("Workshop", DATA, new BigDecimal("4"), palestras);
         atividades.cadastrar("Java", DATA, new BigDecimal("6"), cursos);
 
         categorias.remover(cursos); // a atividade "Java" fica sem categoria

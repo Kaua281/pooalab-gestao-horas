@@ -9,7 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public final class SQLiteCategoriaRepository implements CategoriaRepository {
     private final SQLiteDatabase database;
@@ -20,7 +22,10 @@ public final class SQLiteCategoriaRepository implements CategoriaRepository {
 
     @Override
     public Categoria salvar(Categoria categoria) {
-        String sql = "INSERT INTO categorias (nome, meta_horas) VALUES (?, ?)";
+        String sql = """
+                INSERT INTO categorias (nome, meta_horas, ordem_visualizacao)
+                VALUES (?, ?, COALESCE((SELECT MAX(ordem_visualizacao) + 1 FROM categorias), 0))
+                """;
         try (Connection connection = database.openConnection();
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, categoria.getNome());
@@ -57,7 +62,11 @@ public final class SQLiteCategoriaRepository implements CategoriaRepository {
 
     @Override
     public List<Categoria> listarTodas() {
-        String sql = "SELECT id, nome, meta_horas FROM categorias ORDER BY nome";
+        String sql = """
+                SELECT id, nome, meta_horas
+                FROM categorias
+                ORDER BY ordem_visualizacao, id
+                """;
         try (Connection connection = database.openConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet result = statement.executeQuery()) {
@@ -68,6 +77,51 @@ public final class SQLiteCategoriaRepository implements CategoriaRepository {
             return categorias;
         } catch (SQLException exception) {
             throw new IllegalStateException("Não foi possível listar as categorias.", exception);
+        }
+    }
+
+    @Override
+    public void atualizarOrdem(List<Long> ids) {
+        if (ids == null || ids.stream().anyMatch(id -> id == null)
+                || new HashSet<>(ids).size() != ids.size()) {
+            throw new IllegalArgumentException("A ordem das categorias contém identificadores inválidos.");
+        }
+
+        try (Connection connection = database.openConnection()) {
+            connection.setAutoCommit(false);
+            try {
+                Set<Long> idsExistentes = new HashSet<>();
+                try (PreparedStatement listar = connection.prepareStatement(
+                        "SELECT id FROM categorias");
+                     ResultSet resultado = listar.executeQuery()) {
+                    while (resultado.next()) {
+                        idsExistentes.add(resultado.getLong("id"));
+                    }
+                }
+                if (!idsExistentes.equals(new HashSet<>(ids))) {
+                    throw new IllegalArgumentException(
+                            "A lista deve conter todas as categorias cadastradas.");
+                }
+
+                try (PreparedStatement atualizar = connection.prepareStatement(
+                        "UPDATE categorias SET ordem_visualizacao = ? WHERE id = ?")) {
+                    for (int ordem = 0; ordem < ids.size(); ordem++) {
+                        atualizar.setInt(1, ordem);
+                        atualizar.setLong(2, ids.get(ordem));
+                        atualizar.executeUpdate();
+                    }
+                }
+                connection.commit();
+            } catch (SQLException | RuntimeException exception) {
+                try {
+                    connection.rollback();
+                } catch (SQLException rollbackException) {
+                    exception.addSuppressed(rollbackException);
+                }
+                throw exception;
+            }
+        } catch (SQLException exception) {
+            throw new IllegalStateException("Não foi possível salvar a ordem das categorias.", exception);
         }
     }
 

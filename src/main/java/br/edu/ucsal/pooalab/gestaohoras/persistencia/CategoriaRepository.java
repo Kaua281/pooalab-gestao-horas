@@ -11,5 +11,7 @@ public interface CategoriaRepository {
 
     List<Categoria> listarTodas();
 
+    void atualizarOrdem(List<Long> ids);
+
     void remover(Long id);
 }
