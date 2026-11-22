@@ -36,7 +36,7 @@ public final class Main {
                 PainelInicialService consultaPainel = new PainelInicialService(
                         categoriaService, atividadeService, new ProgressoService(categorias, atividades));
                 PainelInicial painel = new PainelInicial(
-                        consultaPainel.carregar(), consultaPainel::salvarOrdemCategorias, categoriaService);
+                        consultaPainel::carregar, consultaPainel::salvarOrdemCategorias, categoriaService);
                 SwingUtilities.invokeLater(painel::mostrar);
             }
         } catch (IOException exception) {

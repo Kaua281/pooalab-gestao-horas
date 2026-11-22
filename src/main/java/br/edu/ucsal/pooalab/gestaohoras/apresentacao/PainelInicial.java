@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public final class PainelInicial {
     private static final Color FUNDO = new Color(246, 248, 251);
@@ -30,7 +31,7 @@ public final class PainelInicial {
     private static final Color TEXTO_SUAVE = new Color(112, 124, 145);
     private static final Color BORDA = new Color(228, 233, 241);
 
-    private final DadosPainelInicial dados;
+    private final Supplier<DadosPainelInicial> carregarDados;
     private final Consumer<List<Long>> salvarOrdemCategorias;
     private final CategoriaService categoriaService;
     private final Map<String, JButton> botoesNavegacao = new LinkedHashMap<>();
@@ -38,9 +39,10 @@ public final class PainelInicial {
     private JPanel conteudo;
     private JScrollPane painelGeral;
 
-    public PainelInicial(DadosPainelInicial dados, Consumer<List<Long>> salvarOrdemCategorias,
+    public PainelInicial(Supplier<DadosPainelInicial> carregarDados,
+            Consumer<List<Long>> salvarOrdemCategorias,
             CategoriaService categoriaService) {
-        this.dados = dados;
+        this.carregarDados = carregarDados;
         this.salvarOrdemCategorias = salvarOrdemCategorias;
         this.categoriaService = categoriaService;
     }
@@ -147,17 +149,16 @@ public final class PainelInicial {
 
     private JScrollPane criarRolagem(String secao) {
         if ("Visão geral".equals(secao)) {
-            if (painelGeral == null) {
-                painelGeral = new JScrollPane(
-                        new PainelVisaoGeral(dados, salvarOrdemCategorias).criar());
-                painelGeral.setBorder(null);
-                painelGeral.getVerticalScrollBar().setUnitIncrement(16);
-            }
+            painelGeral = new JScrollPane(
+                    new PainelVisaoGeral(carregarDados.get(), salvarOrdemCategorias).criar());
+            painelGeral.setBorder(null);
+            painelGeral.getVerticalScrollBar().setUnitIncrement(16);
             return painelGeral;
         }
 
         if ("Categorias".equals(secao)) {
-            JScrollPane rolagem = new JScrollPane(new PainelCategorias(categoriaService));
+            JScrollPane rolagem = new JScrollPane(
+                    new PainelCategorias(categoriaService, this::atualizarVisaoGeral));
             rolagem.setBorder(null);
             rolagem.getVerticalScrollBar().setUnitIncrement(16);
             return rolagem;
@@ -219,6 +220,10 @@ public final class PainelInicial {
             botao.setForeground(selecionado ? Color.WHITE : new Color(190, 201, 220));
             botao.setFont(new Font(Font.SANS_SERIF, selecionado ? Font.BOLD : Font.PLAIN, 13));
         });
+    }
+
+    private void atualizarVisaoGeral() {
+        painelGeral = null;
     }
 
     private static JLabel rotulo(String texto, Color cor, int tamanho, int estilo) {

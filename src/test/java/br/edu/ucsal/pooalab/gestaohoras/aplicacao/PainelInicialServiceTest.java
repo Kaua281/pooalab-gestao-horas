@@ -82,4 +82,25 @@ class PainelInicialServiceTest {
         assertEquals(List.of("Palestras", "Cursos"),
                 dados.categorias().stream().map(ResumoCategoria::nomeCategoria).toList());
     }
+
+    @Test
+    void recarregaResumoDepoisDeCadastrarAtualizarERemoverCategoria() {
+        DadosPainelInicial antes = painel.carregar();
+        assertEquals(0, antes.categorias().size());
+
+        var categoria = categorias.cadastrar("Pesquisa", new BigDecimal("10"));
+        DadosPainelInicial depoisCadastro = painel.carregar();
+        assertEquals(1, depoisCadastro.categorias().size());
+        assertEquals("Pesquisa", depoisCadastro.categorias().get(0).nomeCategoria());
+
+        categorias.atualizar(categoria.getId(), "Iniciação científica", new BigDecimal("20"));
+        DadosPainelInicial depoisAtualizacao = painel.carregar();
+        assertEquals("Iniciação científica", depoisAtualizacao.categorias().get(0).nomeCategoria());
+        assertEquals(0, new BigDecimal("20").compareTo(
+                depoisAtualizacao.categorias().get(0).metaHoras()));
+
+        categorias.remover(categoria.getId());
+        DadosPainelInicial depoisRemocao = painel.carregar();
+        assertEquals(0, depoisRemocao.categorias().size());
+    }
 }

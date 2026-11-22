@@ -21,6 +21,7 @@ public final class PainelCategorias extends JPanel {
     private static final Color BORDA = new Color(228, 233, 241);
 
     private final CategoriaService service;
+    private final Runnable atualizarPainelInicial;
 
     private JTextField campoNome;
     private JTextField campoMeta;
@@ -30,7 +31,12 @@ public final class PainelCategorias extends JPanel {
     private Long idSelecionado;
 
     public PainelCategorias(CategoriaService service) {
+        this(service, () -> {});
+    }
+
+    public PainelCategorias(CategoriaService service, Runnable atualizarPainelInicial) {
         this.service = service;
+        this.atualizarPainelInicial = atualizarPainelInicial;
 
         setLayout(new BorderLayout());
         setBackground(FUNDO);
@@ -231,6 +237,7 @@ public final class PainelCategorias extends JPanel {
 
             atualizarTabela();
             limparCampos();
+            atualizarPainelInicial.run();
 
             JOptionPane.showMessageDialog(
                     this,
@@ -260,6 +267,7 @@ public final class PainelCategorias extends JPanel {
 
             atualizarTabela();
             limparCampos();
+            atualizarPainelInicial.run();
 
             JOptionPane.showMessageDialog(
                     this,
@@ -296,6 +304,7 @@ public final class PainelCategorias extends JPanel {
 
             atualizarTabela();
             limparCampos();
+            atualizarPainelInicial.run();
 
             JOptionPane.showMessageDialog(
                     this,
