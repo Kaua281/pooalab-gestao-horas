@@ -2,6 +2,7 @@ package br.edu.ucsal.pooalab.gestaohoras.apresentacao;
 
 import br.edu.ucsal.pooalab.gestaohoras.aplicacao.CategoriaService;
 import br.edu.ucsal.pooalab.gestaohoras.aplicacao.DadosPainelInicial;
+import br.edu.ucsal.pooalab.gestaohoras.aplicacao.AtividadeService;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -34,6 +35,7 @@ public final class PainelInicial {
     private final Supplier<DadosPainelInicial> carregarDados;
     private final Consumer<List<Long>> salvarOrdemCategorias;
     private final CategoriaService categoriaService;
+    private final AtividadeService atividadeService;
     private final Map<String, JButton> botoesNavegacao = new LinkedHashMap<>();
     private JFrame janela;
     private JPanel conteudo;
@@ -41,10 +43,12 @@ public final class PainelInicial {
 
     public PainelInicial(Supplier<DadosPainelInicial> carregarDados,
             Consumer<List<Long>> salvarOrdemCategorias,
-            CategoriaService categoriaService) {
+            CategoriaService categoriaService,
+            AtividadeService atividadeService) {
         this.carregarDados = carregarDados;
         this.salvarOrdemCategorias = salvarOrdemCategorias;
         this.categoriaService = categoriaService;
+        this.atividadeService = atividadeService;
     }
 
     public void mostrar() {
@@ -159,6 +163,15 @@ public final class PainelInicial {
         if ("Categorias".equals(secao)) {
             JScrollPane rolagem = new JScrollPane(
                     new PainelCategorias(categoriaService, this::atualizarVisaoGeral));
+            rolagem.setBorder(null);
+            rolagem.getVerticalScrollBar().setUnitIncrement(16);
+            return rolagem;
+        }
+
+        if ("Atividades".equals(secao)) {
+            JScrollPane rolagem = new JScrollPane(
+                    new PainelAtividades(
+                            atividadeService, categoriaService, this::atualizarVisaoGeral));
             rolagem.setBorder(null);
             rolagem.getVerticalScrollBar().setUnitIncrement(16);
             return rolagem;
