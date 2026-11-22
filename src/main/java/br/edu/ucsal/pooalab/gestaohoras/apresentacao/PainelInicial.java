@@ -1,5 +1,6 @@
 package br.edu.ucsal.pooalab.gestaohoras.apresentacao;
 
+import br.edu.ucsal.pooalab.gestaohoras.aplicacao.CategoriaService;
 import br.edu.ucsal.pooalab.gestaohoras.aplicacao.DadosPainelInicial;
 
 import javax.swing.BorderFactory;
@@ -31,14 +32,17 @@ public final class PainelInicial {
 
     private final DadosPainelInicial dados;
     private final Consumer<List<Long>> salvarOrdemCategorias;
+    private final CategoriaService categoriaService;
     private final Map<String, JButton> botoesNavegacao = new LinkedHashMap<>();
     private JFrame janela;
     private JPanel conteudo;
     private JScrollPane painelGeral;
 
-    public PainelInicial(DadosPainelInicial dados, Consumer<List<Long>> salvarOrdemCategorias) {
+    public PainelInicial(DadosPainelInicial dados, Consumer<List<Long>> salvarOrdemCategorias,
+            CategoriaService categoriaService) {
         this.dados = dados;
         this.salvarOrdemCategorias = salvarOrdemCategorias;
+        this.categoriaService = categoriaService;
     }
 
     public void mostrar() {
@@ -150,6 +154,13 @@ public final class PainelInicial {
                 painelGeral.getVerticalScrollBar().setUnitIncrement(16);
             }
             return painelGeral;
+        }
+
+        if ("Categorias".equals(secao)) {
+            JScrollPane rolagem = new JScrollPane(new PainelCategorias(categoriaService));
+            rolagem.setBorder(null);
+            rolagem.getVerticalScrollBar().setUnitIncrement(16);
+            return rolagem;
         }
 
         JScrollPane rolagem = new JScrollPane(criarPagina(secao));
