@@ -177,6 +177,15 @@ public final class PainelInicial {
             return rolagem;
         }
 
+        if ("Comprovantes".equals(secao)) {
+            JScrollPane rolagem = new JScrollPane(
+                    new PainelComprovantes(
+                            atividadeService, categoriaService, this::atualizarVisaoGeral));
+            rolagem.setBorder(null);
+            rolagem.getVerticalScrollBar().setUnitIncrement(16);
+            return rolagem;
+        }
+
         JScrollPane rolagem = new JScrollPane(criarPagina(secao));
         rolagem.setBorder(null);
         rolagem.getVerticalScrollBar().setUnitIncrement(16);
