@@ -2,7 +2,7 @@
 
 **Solução:**
 
-Sistema desktop Java para gerenciamento de horas complementares, permitindo ao estudante cadastrar atividades e associá-las a seus comprovantes, configurar os limites de horas exigidos por categoria e acompanhar o total de horas cumpridas.
+Sistema desktop Java para gerenciamento de horas complementares, permitindo ao estudante cadastrar atividades, configurar os limites de horas exigidos por categoria e acompanhar o total de horas cumpridas.
 
 **Equipe, turma e integrantes:**
 
