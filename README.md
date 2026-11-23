@@ -1,6 +1,6 @@
 # Gestão de Horas Complementares
 
-Aplicação local em Java para registrar atividades complementares e configurar categorias e metas. A interface desktop Swing apresenta um painel inicial com o resumo dos dados salvos; as telas de cadastro e gerenciamento ainda estão em desenvolvimento.
+Aplicação local em Java para registrar atividades complementares e configurar categorias e metas. A interface desktop Swing apresenta um painel inicial com indicadores, atividades recentes e progresso por categoria.
 
 ## Equipe
 
@@ -15,9 +15,27 @@ Aplicação local em Java para registrar atividades complementares e configurar 
 
 ## Escopo inicial
 
-O MVP prevê configurar categorias e suas metas, registrar atividades, associar comprovantes e acompanhar o progresso por categoria. Na versão atual, cadastro, edição e remoção de categorias e atividades e persistência local em SQLite estão disponíveis. A interface de progresso, o gerenciamento de comprovantes e a extração de dados de PDFs ainda não foram implementados. O sistema não substitui a avaliação oficial da coordenação.
+O MVP prevê configurar categorias e suas metas, registrar atividades e acompanhar o progresso por categoria. Na versão atual, cadastro, edição e remoção de categorias e atividades, cálculo de horas, leitura de PDFs pesquisáveis, preenchimento editável dos dados extraídos e persistência local em SQLite estão disponíveis. Os comprovantes podem ser selecionados, copiados e abertos localmente; a associação permanente de um comprovante a uma atividade não faz parte desta etapa. O sistema não substitui a avaliação oficial da coordenação.
 
 O problema e os dados iniciais de validação estão em [`docs/Anexo B — Registro de validação.md`](<docs/Anexo B — Registro de validação.md>). O escopo e os critérios do primeiro MVP estão em [`docs/Anexo C — Definição do MVP.md`](<docs/Anexo C — Definição do MVP.md>).
+
+## Funcionalidades implementadas
+
+- Cadastro, listagem, edição e remoção de categorias com nome e meta de horas
+- Cadastro de atividades complementares com data, carga horária e categoria opcional
+- Cadastro, listagem, edição e remoção de atividades pela interface desktop
+- Cadastro, listagem, edição e remoção de atividades pelo painel de terminal
+- Importação de comprovantes PDF com campos editáveis de título, data, carga horária e categoria
+- Cópia local dos comprovantes importados em `~/.gestao-horas/comprovantes`
+- Exemplo fictício de certificado em [`docs/comprovantes/certificado-generico.pdf`](docs/comprovantes/certificado-generico.pdf)
+- Persistência dos dados em banco SQLite local
+- Cálculo do total de horas, das horas sem categoria e do progresso de cada categoria
+- Painel inicial com indicadores, atividades recentes e progresso por categoria
+- Reordenação das categorias no painel inicial, com a ordem salva localmente
+- Atualização automática dos dados da visão geral após alterações nas categorias
+- Interface desktop em Java Swing com navegação entre Visão geral, Atividades, Categorias e Comprovantes
+
+Os PDFs digitalizados sem texto selecionável ainda dependem de OCR, que não faz parte desta etapa. Os dados extraídos são colocados em campos editáveis para conferência antes da atividade ser adicionada.
 
 ## Arquitetura
 
@@ -100,13 +118,13 @@ No macOS/Linux:
 sh ./mvnw exec:java -Dexec.args="--terminal"
 ```
 
-Os dados ficam em `~/.gestao-horas/gestao-horas.db` (no Windows, dentro da pasta do usuário). Na visão geral, arraste as categorias para mudar a ordem; a escolha fica salva localmente. Como as telas de cadastro ainda estão em desenvolvimento, use `--terminal` e dados fictícios para cadastrar uma categoria, registrar atividades, listar, editar e remover registros. Atividades podem ser registradas sem categoria e reclassificadas depois.
+Os dados ficam em `~/.gestao-horas/gestao-horas.db` (no Windows, dentro da pasta do usuário). Na visão geral, arraste as categorias para mudar a ordem; a escolha fica salva localmente. Todas as telas principais já estão disponíveis em Swing. O modo `--terminal` continua disponível como alternativa para listar e alterar categorias e atividades. Atividades podem ser registradas sem categoria e reclassificadas depois.
 
 ## Tecnologias
 
 - Java 17 e Java Swing para a interface desktop; a interface de terminal também pode ser iniciada com `--terminal`
 - SQLite JDBC para persistência local
-- Apache PDFBox está declarado como dependência para uma etapa futura; leitura e extração de PDFs ainda não estão implementadas
+- Apache PDFBox para extração de texto de PDFs pesquisáveis
 - JUnit 5 para testes automatizados
 
 ## Estrutura
@@ -119,4 +137,4 @@ docs/              problema, validação e definição do MVP
 
 ## Transparência
 
-A declaração obrigatória de componentes de terceiros deverá ser preparada e incluída na entrega final, conforme o Anexo E do manual. A equipe deve registrar as ferramentas e os materiais utilizados durante o desenvolvimento.
+A declaração obrigatória de uso de inteligência artificial e de componentes de terceiros está em [`docs/Anexo E — Declaração de uso de inteligência artificial e de componentes de terceiros.md`](<docs/Anexo E — Declaração de uso de inteligência artificial e de componentes de terceiros.md>), conforme o Anexo E do manual.

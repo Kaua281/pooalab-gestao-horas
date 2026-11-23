@@ -10,13 +10,13 @@ Estudantes da UCSal que precisam acompanhar as horas complementares exigidas em 
 
 ## Proposta de valor
 
-Reunir em um só lugar o registro das atividades complementares e seus comprovantes e mostrar, com base nas metas configuradas pelo estudante, as horas registradas e as que ainda faltam por categoria.
+Reunir em um só lugar o registro das atividades complementares e o apoio à leitura de comprovantes e mostrar, com base nas metas configuradas pelo estudante, as horas registradas e as que ainda faltam por categoria.
 
 ## Fluxo principal
 
 1. Criamos as categorias necessárias e informamos a meta de horas de cada uma.
 2. Registramos uma atividade, preenchendo os dados manualmente ou usando sugestões extraídas de um comprovante.
-3. Anexamos o comprovante digital, se já o tivermos.
+3. Quando necessário, selecionamos um comprovante digital para facilitar o preenchimento e copiar o arquivo localmente.
 4. Conferimos e corrigimos as informações sugeridas antes de salvar a atividade.
 5. Consultamos o total de horas registradas, o progresso e as horas restantes de cada categoria.
 6. Se necessário, corrigimos ou removemos um registro e conferimos os totais atualizados.
@@ -27,10 +27,11 @@ Reunir em um só lugar o registro das atividades complementares e seus comprovan
 - Cadastro e edição de categorias e suas metas de horas.
 - Remoção de categorias sem apagar as atividades associadas; elas ficam sem categoria e podem ser reclassificadas ao editar o registro.
 - Cadastro, consulta, edição e remoção de atividades.
-- Associação opcional de comprovante PDF ou imagem a uma atividade.
+- Seleção e leitura de comprovantes PDF pesquisáveis para sugerir dados da atividade.
+- Cópia local opcional do PDF selecionado em uma pasta do aplicativo.
 - Extração de texto de PDFs pesquisáveis (com texto selecionável) para sugerir título, data e carga horária da atividade, quando essas informações forem encontradas.
 - Revisão e confirmação manual das sugestões antes de salvar. O estudante poderá corrigir os dados ou preencher a atividade manualmente se a extração não encontrar informações úteis.
-- Persistência local de categorias, atividades e referências aos comprovantes, para que os dados continuem disponíveis após fechar e abrir o programa.
+- Persistência local de categorias e atividades, para que os dados continuem disponíveis após fechar e abrir o programa.
 - Painel com horas registradas no total e por categoria, meta, horas restantes e progresso percentual. As horas restantes não serão exibidas como número negativo quando a meta for atingida.
 - Dados fictícios para a demonstração, sem informações pessoais ou documentos reais.
 
@@ -46,11 +47,11 @@ As categorias e metas serão informadas pelo estudante. Não vamos presumir que 
 - As horas registradas por categoria correspondem à soma das atividades registradas naquela categoria.
 - As horas restantes correspondem a `máximo entre zero e (meta da categoria - horas registradas)`.
 - O progresso por categoria é calculado como `mínimo entre (horas registradas / meta) × 100 e 100%`.
-- Conseguimos anexar e abrir um comprovante local, e a tela indica quando não há comprovante anexado.
+- Conseguimos selecionar, ler e abrir um comprovante PDF local a partir do painel de comprovantes.
 - Ao selecionar um PDF com texto selecionável, o sistema sugere título, data e carga horária quando conseguir identificá-los, e permite revisar e corrigir cada campo antes de salvar.
 - Se o PDF não tiver texto selecionável ou não contiver informações reconhecíveis, o sistema informa que não conseguiu sugerir os dados e permite continuar o preenchimento manual.
 - A categoria é escolhida pelo estudante; uma sugestão extraída nunca é apresentada como confirmação de que a atividade será aceita pela coordenação.
-- Categorias, atividades e comprovantes continuam disponíveis depois de encerrar e iniciar novamente a aplicação.
+- Categorias e atividades continuam disponíveis depois de encerrar e iniciar novamente a aplicação.
 - Uma pessoa da equipe consegue executar o fluxo completo usando apenas as instruções do README e os dados fictícios.
 - Os testes cobrem pelo menos os cálculos de horas restantes e progresso, além das validações de entrada do fluxo principal.
 
@@ -71,7 +72,7 @@ Esses itens poderão ser considerados depois de conversarmos com estudantes e co
 
 - O sistema organiza os registros do estudante; não é um sistema oficial da UCSal nem valida a aceitação das atividades.
 - As metas precisam ser conferidas pelo próprio estudante com uma fonte oficial do seu curso.
-- Os dados e comprovantes ficam no computador em que a aplicação for usada; esta versão não oferece cópia de segurança automática nem sincronização.
+- Os dados ficam no computador em que a aplicação for usada; a cópia local do PDF é opcional e esta versão não oferece cópia de segurança automática nem sincronização.
 - A extração depende da qualidade e da estrutura do texto do PDF. As sugestões podem estar incompletas ou incorretas e sempre precisam ser conferidas pelo estudante.
 - Na demonstração, usaremos somente dados e documentos fictícios.
 
@@ -80,8 +81,7 @@ Esses itens poderão ser considerados depois de conversarmos com estudantes e co
 - Interface desktop feita com Java Swing, para manter a aplicação executável localmente sem servidor.
 - Banco SQLite local para persistir categorias e atividades.
 - Biblioteca Java de leitura de PDF para extrair texto de PDFs pesquisáveis; a biblioteca e sua licença serão registradas na declaração de componentes de terceiros.
-- Comprovantes armazenados como arquivos locais, com a localização associada ao registro da atividade.
-- O arquivo README será atualizado com os passos de instalação, execução, teste e demonstração quando a implementação estiver pronta.
+- Comprovantes armazenados como arquivos locais quando o usuário solicita a cópia. Nesta versão, o arquivo não é associado permanentemente ao registro da atividade.
 
 ## Como vamos validar a solução
 
